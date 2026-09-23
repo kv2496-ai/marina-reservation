@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WHOI Marina Reservations — Resolve</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="topbar no-print">
+    <div class="brand">WHOI Marina Reservations</div>
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="reservations.html">Reservations</a>
+        <a href="vessels.html">Vessels</a>
+        <a href="berths.html">Berths</a>
+        <a href="review.html">Import Review</a>
+        <a href="resolve.html" class="active">Resolve</a>
+    </nav>
+</header>
+<main>
+    <h1>Resolve</h1>
+    <p class="subtitle">Automated conflict, oversized-berth, and missing-data resolution. Only
+        current/future reservations are actionable here — a reservation that already happened
+        can't be un-booked, so historical flags stay informational (see the
+        <a href="index.html">Dashboard</a> and <a href="review.html">Import Review</a>) and are
+        just counted below, not listed. There's no email/SMS hookup in this prototype: "notify"
+        means a log entry here — you still place the call or send the email yourself using the
+        contact info on file.</p>
+
+    <section class="card" id="conflictsSection">
+        <h2>Hard conflicts <span class="pill" id="conflictsCount">0</span></h2>
+        <p class="small muted" id="conflictsHistoricalNote"></p>
+        <div id="conflictsList"></div>
+    </section>
+
+    <section class="card" id="loaSection">
+        <h2>Vessel too long for its berth <span class="pill" id="loaCount">0</span></h2>
+        <p class="small muted" id="loaHistoricalNote"></p>
+        <div id="loaList"></div>
+    </section>
+
+    <section class="card" id="missingDataSection">
+        <h2>Missing vital vessel data <span class="pill" id="missingCount">0</span></h2>
+        <p class="small muted" id="missingHistoricalNote"></p>
+        <div id="missingList"></div>
+    </section>
+
+    <section class="card" id="waitlistSection">
+        <h2>Waitlist <span class="pill" id="waitlistCount">0</span></h2>
+        <div class="toolbar no-print"><button class="secondary" id="checkWaitlistBtn">Check for matches now</button></div>
+        <div id="waitlistList"></div>
+    </section>
+
+    <section class="card" id="notificationsSection">
+        <h2>Recent notifications</h2>
+        <div id="notificationsList"></div>
+    </section>
+</main>
+
+<div id="detailModal"></div>
+<script src="js/api.js"></script>
+<script src="js/resolve.js"></script>
+</body>
+</html>

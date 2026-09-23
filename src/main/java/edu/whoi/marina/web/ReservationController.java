@@ -3,6 +3,7 @@ package edu.whoi.marina.web;
 import edu.whoi.marina.domain.*;
 import edu.whoi.marina.service.AuditService;
 import edu.whoi.marina.service.ReservationService;
+import edu.whoi.marina.service.WaitlistService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,12 @@ public class ReservationController {
 
     private final ReservationService service;
     private final AuditService auditService;
+    private final WaitlistService waitlistService;
 
-    public ReservationController(ReservationService service, AuditService auditService) {
+    public ReservationController(ReservationService service, AuditService auditService, WaitlistService waitlistService) {
         this.service = service;
         this.auditService = auditService;
+        this.waitlistService = waitlistService;
     }
 
     @GetMapping
@@ -67,12 +70,15 @@ public class ReservationController {
     @PostMapping("/{id}/cancel")
     public Reservation cancel(@PathVariable String id,
                                @RequestHeader(value = "X-User", defaultValue = "staff") String user) {
-        return service.cancel(id, user);
+        Reservation result = service.cancel(id, user);
+        waitlistService.checkForMatches(); // canceling may have freed a berth a waiting vessel fits
+        return result;
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id,
                         @RequestHeader(value = "X-User", defaultValue = "staff") String user) {
         service.delete(id, user);
+        waitlistService.checkForMatches();
     }
 }

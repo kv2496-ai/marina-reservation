@@ -43,6 +43,16 @@ public class StoreConfig {
         return new JsonCollectionStore<>(dataFile(props, "import-review-queue.json"), mapper, ReviewQueueItem.class, r -> r.id);
     }
 
+    @Bean
+    public JsonCollectionStore<Notification> notificationStore(MarinaProperties props, ObjectMapper mapper) {
+        return new JsonCollectionStore<>(dataFile(props, "notifications.json"), mapper, Notification.class, n -> n.id);
+    }
+
+    @Bean
+    public JsonCollectionStore<WaitlistEntry> waitlistStore(MarinaProperties props, ObjectMapper mapper) {
+        return new JsonCollectionStore<>(dataFile(props, "waitlist.json"), mapper, WaitlistEntry.class, w -> w.id);
+    }
+
     private Path dataFile(MarinaProperties props, String name) {
         return Path.of(props.getDataDir()).resolve(name);
     }

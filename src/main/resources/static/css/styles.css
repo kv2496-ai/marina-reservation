@@ -198,6 +198,22 @@ table.calendar td.day-cell .conflict-mark { color: #fff; font-weight: 700; margi
 .text-right { text-align: right; }
 .small { font-size: 12px; }
 
+/* --- Resolve tab --- */
+.resolve-card {
+    border: 1px solid var(--color-border); border-radius: 8px; padding: 10px 14px;
+    margin-bottom: 10px; background: var(--color-surface);
+}
+.resolve-card.dq { border-left: 4px solid #5b6b7a; }
+.resolve-card.warn { border-left: 4px solid var(--color-warning); }
+.resolve-card.hard { border-left: 4px solid var(--color-danger); }
+.resolve-card .rc-title { font-weight: 700; margin-bottom: 2px; }
+.resolve-card .rc-meta { font-size: 12px; color: var(--color-text-muted); margin-bottom: 8px; }
+.resolve-card .rc-meta div { margin-bottom: 2px; }
+.resolve-card .rc-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.resolve-card .rc-result { margin-top: 8px; padding: 8px 10px; border-radius: 6px; background: #eef6f0; font-size: 12px; border: 1px solid #cfe8d6; }
+.resolve-card .rc-result.err { background: #fbeceb; border-color: #f0c7c3; }
+.empty-note { color: var(--color-text-muted); font-size: 13px; padding: 4px 0 10px; }
+
 /* --- Agenda (mobile calendar list view) --- */
 .view-toggle { display: inline-flex; border: 1px solid var(--color-border); border-radius: 5px; overflow: hidden; }
 .view-toggle button { background: #e2e8ee; color: var(--color-text); border-radius: 0; }
