@@ -1,5 +1,9 @@
 # WHOI Marina Reservation System (prototype)
 
+**Live demo:** https://whoi-marina-reservation.onrender.com (free tier — first request after a
+period of inactivity takes ~30-60s to wake up; data resets to the historical import on every
+restart, see the Deployment section below)
+
 Berth reservation system for the marine research facility's waterfront: vessel and non-vessel
 (community events, tours, maintenance) reservations, a dock-schedule calendar view, automatic
 overlap/conflict detection, and an import of the 1997–2019 historical spreadsheet.
@@ -84,15 +88,9 @@ reservation creation accepts an `Idempotency-Key` header to make accidental doub
 
 ## Deployment
 
-Source is public at **https://github.com/kv2496-ai/marina-reservation**. A `Dockerfile` and
-`render.yaml` are included and ready to use, but nothing is deployed live yet — connecting a host
-to this repo needs an account only you control, so that step is on you:
-
-1. Sign up at [Render](https://render.com) (free tier) if you don't already have an account.
-2. New → **Blueprint** → connect your GitHub account → pick `kv2496-ai/marina-reservation`. Render
-   will pick up `render.yaml` automatically and build/run the Docker image.
-3. First boot will take a few extra seconds while it imports the historical workbook, same as
-   running locally.
+Source is public at **https://github.com/kv2496-ai/marina-reservation**, deployed live at
+**https://whoi-marina-reservation.onrender.com** via Render's free tier (`New → Blueprint`,
+auto-deploys on every push to `main`).
 
 **Free-tier caveat:** Render's free plan doesn't support persistent disks, so `render.yaml`
 deploys with the JSON store on the container's ephemeral filesystem — it self-re-imports from the
