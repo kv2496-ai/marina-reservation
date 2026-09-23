@@ -39,14 +39,14 @@ async function search() {
     const body = document.querySelector('#resultsTable tbody');
     body.innerHTML = resultRows.map(r => `
         <tr data-id="${r.id}" style="cursor:pointer">
-            <td>${r.startDate}</td>
-            <td>${r.endDate}</td>
-            <td><span class="badge kind-${r.kind.toLowerCase()}">${r.kind}</span></td>
-            <td>${escapeHtml(r.vesselNameSnapshot || r.title || '')}</td>
-            <td>${escapeHtml(r.berthNameSnapshot || '<span class="muted">unassigned</span>')}</td>
-            <td><span class="badge status-${r.status.toLowerCase()}">${r.status}</span></td>
-            <td>${r.raftingApproved ? '✔' : ''}</td>
-            <td><button class="secondary small-btn" data-del="${r.id}">Delete</button></td>
+            <td data-label="Start">${r.startDate}</td>
+            <td data-label="End">${r.endDate}</td>
+            <td data-label="Kind"><span class="badge kind-${r.kind.toLowerCase()}">${r.kind}</span></td>
+            <td data-label="Vessel / Title">${escapeHtml(r.vesselNameSnapshot || r.title || '')}</td>
+            <td data-label="Berth">${escapeHtml(r.berthNameSnapshot || '<span class="muted">unassigned</span>')}</td>
+            <td data-label="Status"><span class="badge status-${r.status.toLowerCase()}">${r.status}</span></td>
+            <td data-label="Rafting">${r.raftingApproved ? '✔' : ''}</td>
+            <td data-label="Actions"><button class="secondary small-btn" data-del="${r.id}">Delete</button></td>
         </tr>`).join('') || '<tr><td colspan="8" class="muted">No matching reservations</td></tr>';
 
     body.querySelectorAll('tr[data-id]').forEach(tr => {
@@ -91,11 +91,11 @@ document.getElementById('availBtn').addEventListener('click', async () => {
         const body = document.querySelector('#availTable tbody');
         body.innerHTML = suggestions.map(s => `
             <tr>
-                <td>${escapeHtml(s.berth.name)}</td>
-                <td>${s.berth.lengthFt ? s.berth.lengthFt + "'" : '<span class="muted">unknown</span>'}</td>
-                <td>${s.lengthCompatible ? '✔' : '✘'}</td>
-                <td>${s.hasConfirmedConflict ? '⚠ yes' : 'no'}</td>
-                <td class="small muted">${escapeHtml(s.note || '')}</td>
+                <td data-label="Berth">${escapeHtml(s.berth.name)}</td>
+                <td data-label="Length">${s.berth.lengthFt ? s.berth.lengthFt + "'" : '<span class="muted">unknown</span>'}</td>
+                <td data-label="Fits LOA">${s.lengthCompatible ? '✔' : '✘'}</td>
+                <td data-label="Conflict">${s.hasConfirmedConflict ? '⚠ yes' : 'no'}</td>
+                <td data-label="Note" class="small muted">${escapeHtml(s.note || '')}</td>
             </tr>`).join('');
     } catch (e) {
         toast('Failed: ' + e.message, 'error');

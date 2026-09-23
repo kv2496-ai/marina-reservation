@@ -4,16 +4,16 @@ async function loadVessels(q) {
     const body = document.querySelector('#vesselTable tbody');
     body.innerHTML = vessels.map(v => `
         <tr data-id="${v.id}">
-            <td>${escapeHtml(v.name)}</td>
-            <td>${escapeHtml(v.type || '')}</td>
-            <td>${v.loaFt ?? '<span class="muted">?</span>'}</td>
-            <td>${v.draftFt ?? '<span class="muted">?</span>'}</td>
-            <td>${escapeHtml(v.operator || '')}</td>
-            <td>${escapeHtml(v.contactName || '')}</td>
-            <td>${escapeHtml(v.phone || '')}</td>
-            <td>${escapeHtml(v.email || '')}</td>
-            <td>${v.dataQuality && v.dataQuality.flaggedForReview ? '<span class="badge severity-data_quality">review</span>' : ''}</td>
-            <td>
+            <td data-label="Name">${escapeHtml(v.name)}</td>
+            <td data-label="Type">${escapeHtml(v.type || '')}</td>
+            <td data-label="LOA">${v.loaFt ?? '<span class="muted">?</span>'}</td>
+            <td data-label="Draft">${v.draftFt ?? '<span class="muted">?</span>'}</td>
+            <td data-label="Operator">${escapeHtml(v.operator || '')}</td>
+            <td data-label="Contact">${escapeHtml(v.contactName || '')}</td>
+            <td data-label="Phone">${escapeHtml(v.phone || '')}</td>
+            <td data-label="Email">${escapeHtml(v.email || '')}</td>
+            <td data-label="Flags">${v.dataQuality && v.dataQuality.flaggedForReview ? '<span class="badge severity-data_quality">review</span>' : ''}</td>
+            <td data-label="Actions">
                 <button class="secondary" data-edit="${v.id}">Edit</button>
                 <button class="danger" data-del="${v.id}">Delete</button>
             </td>

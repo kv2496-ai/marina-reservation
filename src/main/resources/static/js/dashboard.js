@@ -12,7 +12,7 @@ async function loadDashboard() {
 
         const freeBody = document.querySelector('#freeBerthsTable tbody');
         freeBody.innerHTML = s.freeBerthsNow.map(b =>
-            `<tr><td>${escapeHtml(b.name)}</td><td>${b.lengthFt ? b.lengthFt + "'" : '<span class="muted">unknown</span>'}</td></tr>`
+            `<tr><td data-label="Berth">${escapeHtml(b.name)}</td><td data-label="Length">${b.lengthFt ? b.lengthFt + "'" : '<span class="muted">unknown</span>'}</td></tr>`
         ).join('') || '<tr><td colspan="2" class="muted">None</td></tr>';
 
         const hardList = document.getElementById('hardConflictList');
@@ -33,10 +33,10 @@ function fillReservationTable(tableId, rows, dateFn) {
     const body = document.querySelector('#' + tableId + ' tbody');
     body.innerHTML = rows.map(r => `
         <tr>
-            <td>${dateFn(r)}</td>
-            <td><span class="badge kind-${r.kind.toLowerCase()}">${r.kind}</span> ${escapeHtml(r.vesselNameSnapshot || r.title || '')}</td>
-            <td>${escapeHtml(r.berthNameSnapshot || '')}</td>
-            <td><span class="badge status-${r.status.toLowerCase()}">${r.status}</span></td>
+            <td data-label="Date">${dateFn(r)}</td>
+            <td data-label="Vessel / Event"><span class="badge kind-${r.kind.toLowerCase()}">${r.kind}</span> ${escapeHtml(r.vesselNameSnapshot || r.title || '')}</td>
+            <td data-label="Berth">${escapeHtml(r.berthNameSnapshot || '')}</td>
+            <td data-label="Status"><span class="badge status-${r.status.toLowerCase()}">${r.status}</span></td>
         </tr>`).join('') || `<tr><td colspan="4" class="muted">None</td></tr>`;
 }
 

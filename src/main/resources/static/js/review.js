@@ -18,12 +18,12 @@ function render() {
     const body = document.querySelector('#reviewTable tbody');
     body.innerHTML = rows.map(i => `
         <tr style="${i.resolved ? 'opacity:0.5' : ''}">
-            <td><span class="pill">${escapeHtml(i.category)}</span></td>
-            <td>${escapeHtml(i.sheet || '')}</td>
-            <td>${escapeHtml(i.location || '')}</td>
-            <td class="small">${escapeHtml(i.description)}</td>
-            <td class="small muted">${escapeHtml(i.rawData || '')}</td>
-            <td>${i.resolved ? '' : `<button class="secondary" data-resolve="${i.id}">Mark reviewed</button>`}</td>
+            <td data-label="Category"><span class="pill">${escapeHtml(i.category)}</span></td>
+            <td data-label="Sheet">${escapeHtml(i.sheet || '')}</td>
+            <td data-label="Location">${escapeHtml(i.location || '')}</td>
+            <td data-label="Description" class="small">${escapeHtml(i.description)}</td>
+            <td data-label="Raw data" class="small muted">${escapeHtml(i.rawData || '')}</td>
+            <td data-label="Actions">${i.resolved ? '' : `<button class="secondary" data-resolve="${i.id}">Mark reviewed</button>`}</td>
         </tr>`).join('') || '<tr><td colspan="6" class="muted">Nothing here</td></tr>';
 
     body.querySelectorAll('[data-resolve]').forEach(btn => btn.addEventListener('click', async () => {

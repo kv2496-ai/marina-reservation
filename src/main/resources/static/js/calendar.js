@@ -1,6 +1,7 @@
 let allBerths = [];
 let allReservations = [];
 let reservationById = new Map();
+let viewMode = window.matchMedia('(max-width: 700px)').matches ? 'list' : 'grid';
 
 function currentMonthValue() {
     const picker = document.getElementById('monthPicker');
@@ -32,6 +33,31 @@ async function renderCalendar() {
     ]);
     reservationById = new Map(allReservations.map(r => [r.id, r]));
 
+    applyViewMode();
+    if (viewMode === 'grid') {
+        renderGridView(year, month);
+    } else {
+        renderListView(year, month);
+    }
+}
+
+function applyViewMode() {
+    document.getElementById('gridViewWrap').style.display = viewMode === 'grid' ? '' : 'none';
+    document.getElementById('listViewWrap').style.display = viewMode === 'list' ? '' : 'none';
+    document.getElementById('gridViewBtn').classList.toggle('active', viewMode === 'grid');
+    document.getElementById('listViewBtn').classList.toggle('active', viewMode === 'list');
+}
+
+function setViewMode(mode) {
+    viewMode = mode;
+    applyViewMode();
+    const [year, month] = currentMonthValue().split('-').map(Number);
+    if (mode === 'grid') renderGridView(year, month); else renderListView(year, month);
+}
+
+// ---------- Grid view (desktop) ----------
+
+function renderGridView(year, month) {
     const nDays = daysInMonth(year, month);
     const table = document.getElementById('calendarTable');
 
@@ -98,9 +124,7 @@ function renderBerthDays(berth, year, month, nDays, reservations) {
 
 function cellHtml(r, span, conflict) {
     const kindColor = `var(--kind-${r.kind.toLowerCase()})`;
-    const statusAlpha = {
-        DRAFT: 0.45, PENDING: 0.7, CONFIRMED: 1, CANCELED: 0.25, COMPLETED: 0.55,
-    }[r.status] ?? 1;
+    const statusAlpha = statusAlphaFor(r.status);
     const textColor = statusAlpha < 0.6 ? '#1f2933' : '#fff';
     const label = escapeHtml(r.vesselNameSnapshot || r.title || r.kind);
     return `<td class="day-cell" colspan="${span}" data-res-id="${r.id}"
@@ -108,10 +132,82 @@ function cellHtml(r, span, conflict) {
         title="${escapeHtml(r.kind)} — ${label} (${r.status})">${conflict ? '<span class="conflict-mark" style="color:#b3261e">⚠</span>' : ''}${label}</td>`;
 }
 
+function statusAlphaFor(status) {
+    return { DRAFT: 0.45, PENDING: 0.7, CONFIRMED: 1, CANCELED: 0.25, COMPLETED: 0.55 }[status] ?? 1;
+}
+
+// ---------- List / agenda view (mobile) ----------
+
+function renderListView(year, month) {
+    const wrap = document.getElementById('listViewWrap');
+    const berthById = new Map(allBerths.map(b => [b.id, b]));
+
+    const active = allReservations
+        .filter(r => r.status !== 'CANCELED')
+        .slice()
+        .sort((a, b) => (a.startDate || '').localeCompare(b.startDate || '') || (a.berthNameSnapshot || '').localeCompare(b.berthNameSnapshot || ''));
+
+    // Conflict lookup: any reservation sharing a berth + overlapping dates with another active one.
+    const conflictIds = new Set();
+    for (let i = 0; i < active.length; i++) {
+        for (let j = i + 1; j < active.length; j++) {
+            const a = active[i], b = active[j];
+            if (a.berthId && a.berthId === b.berthId && a.startDate <= b.endDate && b.startDate <= a.endDate) {
+                conflictIds.add(a.id);
+                conflictIds.add(b.id);
+            }
+        }
+    }
+
+    if (active.length === 0) {
+        wrap.innerHTML = '<p class="muted">No reservations this month.</p>';
+        return;
+    }
+
+    const groups = new Map(); // startDate -> reservations[]
+    for (const r of active) {
+        const key = r.startDate || '(no date)';
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(r);
+    }
+
+    let html = '';
+    for (const [date, rows] of groups) {
+        const label = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        html += `<div class="agenda-day"><div class="agenda-date">${escapeHtml(label)}</div>`;
+        for (const r of rows) {
+            const berth = berthById.get(r.berthId);
+            const kindColor = `var(--kind-${r.kind.toLowerCase()})`;
+            const label2 = escapeHtml(r.vesselNameSnapshot || r.title || r.kind);
+            const span = r.startDate === r.endDate ? r.startDate : `${r.startDate} → ${r.endDate}`;
+            const conflict = conflictIds.has(r.id) ? '<span class="conflict-mark" style="color:var(--color-danger)">⚠ </span>' : '';
+            html += `
+                <div class="agenda-card" data-res-id="${r.id}">
+                    <div class="agenda-color" style="background:${kindColor}; opacity:${statusAlphaFor(r.status)};"></div>
+                    <div class="agenda-body">
+                        <div class="agenda-title">${conflict}${label2}</div>
+                        <div class="agenda-meta">${escapeHtml(berth ? berth.name : (r.berthNameSnapshot || 'unassigned'))} · ${span} ·
+                            <span class="badge status-${r.status.toLowerCase()}">${r.status}</span></div>
+                    </div>
+                </div>`;
+        }
+        html += '</div>';
+    }
+    wrap.innerHTML = html;
+
+    wrap.querySelectorAll('.agenda-card').forEach(card => {
+        card.addEventListener('click', () => {
+            ReservationForm.open(reservationById.get(card.dataset.resId), null, renderCalendar);
+        });
+    });
+}
+
 document.getElementById('prevMonth').addEventListener('click', () => shiftMonth(-1));
 document.getElementById('nextMonth').addEventListener('click', () => shiftMonth(1));
 document.getElementById('monthPicker').addEventListener('change', renderCalendar);
 document.getElementById('newReservationBtn').addEventListener('click', () => ReservationForm.open(null, null, renderCalendar));
+document.getElementById('gridViewBtn').addEventListener('click', () => setViewMode('grid'));
+document.getElementById('listViewBtn').addEventListener('click', () => setViewMode('list'));
 
 function shiftMonth(delta) {
     const [year, month] = currentMonthValue().split('-').map(Number);

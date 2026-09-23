@@ -24,15 +24,20 @@
         <button class="secondary" id="prevMonth">&larr; Prev</button>
         <input type="month" id="monthPicker" style="width:auto;">
         <button class="secondary" id="nextMonth">Next &rarr;</button>
+        <span class="view-toggle no-print">
+            <button class="secondary" id="gridViewBtn" type="button">Grid</button>
+            <button class="secondary" id="listViewBtn" type="button">List</button>
+        </span>
         <span class="spacer"></span>
         <button class="secondary" onclick="window.print()">Print</button>
         <a class="btn secondary" id="exportCsvLink" href="#">Export CSV (this month)</a>
         <button id="newReservationBtn">+ New reservation</button>
     </div>
 
-    <div class="card calendar-wrap">
+    <div class="card calendar-wrap" id="gridViewWrap">
         <table class="calendar" id="calendarTable"></table>
     </div>
+    <div class="card" id="listViewWrap" style="display:none;"></div>
 
     <div class="legend no-print">
         <span><span class="swatch" style="background:var(--kind-vessel)"></span>Vessel</span>

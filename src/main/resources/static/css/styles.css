@@ -198,6 +198,66 @@ table.calendar td.day-cell .conflict-mark { color: #fff; font-weight: 700; margi
 .text-right { text-align: right; }
 .small { font-size: 12px; }
 
+/* --- Agenda (mobile calendar list view) --- */
+.view-toggle { display: inline-flex; border: 1px solid var(--color-border); border-radius: 5px; overflow: hidden; }
+.view-toggle button { background: #e2e8ee; color: var(--color-text); border-radius: 0; }
+.view-toggle button.active { background: var(--color-primary); color: #fff; }
+
+.agenda-day { margin-bottom: 18px; }
+.agenda-day .agenda-date { font-weight: 700; font-size: 14px; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--color-border); }
+.agenda-card {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 8px; border: 1px solid var(--color-border);
+    background: var(--color-surface); margin-bottom: 8px; cursor: pointer;
+}
+.agenda-card:active { background: #eef2f5; }
+.agenda-card .agenda-color { width: 8px; align-self: stretch; border-radius: 4px; flex-shrink: 0; }
+.agenda-card .agenda-body { flex: 1; min-width: 0; }
+.agenda-card .agenda-title { font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.agenda-card .agenda-meta { font-size: 12px; color: var(--color-text-muted); margin-top: 2px; }
+.agenda-empty { color: var(--color-text-muted); font-size: 13px; padding: 6px 0; }
+
+/* --- Mobile layout: narrower gutters, stacked toolbars, card-style tables --- */
+@media (max-width: 700px) {
+    main { padding: 12px; }
+    h1 { font-size: 18px; }
+    .card { padding: 12px; }
+
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar > * { width: 100%; }
+    .toolbar .spacer { display: none; }
+    .toolbar input, .toolbar select { width: 100%; }
+
+    header.topbar { padding: 8px 12px; gap: 8px; }
+    header.topbar nav a { padding: 8px 10px; }
+
+    .modal-backdrop { padding: 0; align-items: stretch; }
+    .modal { width: 100%; max-width: none; min-height: 100%; border-radius: 0; }
+    .modal .row-2 { grid-template-columns: 1fr; gap: 0; }
+
+    /* Card-style responsive tables: each <tr> becomes a card, <td>s become label/value rows.
+       Uses flexbox (not float) so empty cells still take up a proper row instead of collapsing
+       and letting their label overlap the next row. */
+    table.responsive-table thead { display: none; }
+    table.responsive-table, table.responsive-table tbody, table.responsive-table tr { display: block; width: 100%; }
+    table.responsive-table { border: none; }
+    table.responsive-table tr {
+        margin-bottom: 10px; border: 1px solid var(--color-border); border-radius: 8px;
+        padding: 6px 10px; background: var(--color-surface);
+    }
+    table.responsive-table td {
+        display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+        border: none; border-bottom: 1px solid #eef2f5;
+        padding: 6px 2px; text-align: right; font-size: 13px; width: auto;
+    }
+    table.responsive-table td:last-child { border-bottom: none; }
+    table.responsive-table td[data-label]::before {
+        content: attr(data-label); font-weight: 600;
+        color: var(--color-text-muted); text-align: left; flex-shrink: 0;
+    }
+    table.responsive-table td:empty::before { content: attr(data-label) " —"; color: var(--color-border); }
+}
+
 @media print {
     header.topbar, .no-print { display: none !important; }
     body { background: #fff; }

@@ -3,11 +3,11 @@ async function loadBerths() {
     const body = document.querySelector('#berthTable tbody');
     body.innerHTML = berths.map(b => `
         <tr>
-            <td>${escapeHtml(b.name)} ${b.unverified ? '<span class="badge severity-data_quality">unverified</span>' : ''}</td>
-            <td>${b.lengthFt ? b.lengthFt + "'" : '<span class="muted">unknown</span>'}</td>
-            <td><span class="badge status-${b.status === 'ACTIVE' ? 'confirmed' : 'canceled'}">${b.status}</span></td>
-            <td class="small">${escapeHtml(b.notes || '')}</td>
-            <td>
+            <td data-label="Name">${escapeHtml(b.name)} ${b.unverified ? '<span class="badge severity-data_quality">unverified</span>' : ''}</td>
+            <td data-label="Length">${b.lengthFt ? b.lengthFt + "'" : '<span class="muted">unknown</span>'}</td>
+            <td data-label="Status"><span class="badge status-${b.status === 'ACTIVE' ? 'confirmed' : 'canceled'}">${b.status}</span></td>
+            <td data-label="Notes" class="small">${escapeHtml(b.notes || '')}</td>
+            <td data-label="Actions">
                 <button class="secondary" data-edit="${b.id}">Edit</button>
                 <button class="danger" data-del="${b.id}">Delete</button>
             </td>
