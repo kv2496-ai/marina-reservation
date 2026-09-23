@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WHOI Marina Reservations — Import Review</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="topbar no-print">
+    <div class="brand">WHOI Marina Reservations</div>
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="reservations.html">Reservations</a>
+        <a href="vessels.html">Vessels</a>
+        <a href="berths.html">Berths</a>
+        <a href="review.html" class="active">Import Review</a>
+    </nav>
+</header>
+<main>
+    <h1>Import review queue</h1>
+    <p class="subtitle">Everything the historical-import process could not confidently resolve on its own —
+    ambiguous cells, missing data, possible duplicates — lives here instead of being silently guessed at.
+    See also the validation warnings on the <a href="index.html">dashboard</a> for per-reservation issues.</p>
+
+    <div class="toolbar no-print">
+        <label style="margin:0;"><input type="checkbox" id="showResolved" style="width:auto;display:inline-block;"> Show resolved</label>
+        <select id="categoryFilter" style="max-width:260px;"><option value="">All categories</option></select>
+        <span class="spacer"></span>
+        <span id="countLabel" class="muted small"></span>
+    </div>
+
+    <div class="card">
+        <table id="reviewTable">
+            <thead><tr><th>Category</th><th>Sheet</th><th>Location</th><th>Description</th><th>Raw data</th><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</main>
+<script src="js/api.js"></script>
+<script src="js/review.js"></script>
+</body>
+</html>

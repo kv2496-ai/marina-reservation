@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WHOI Marina Reservations — Vessels</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="topbar no-print">
+    <div class="brand">WHOI Marina Reservations</div>
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="reservations.html">Reservations</a>
+        <a href="vessels.html" class="active">Vessels</a>
+        <a href="berths.html">Berths</a>
+        <a href="review.html">Import Review</a>
+    </nav>
+</header>
+<main>
+    <h1>Vessel database</h1>
+    <div class="toolbar no-print">
+        <input id="vesselSearch" placeholder="Search vessels…" style="max-width:300px;">
+        <span class="spacer"></span>
+        <button id="newVesselBtn">+ New vessel</button>
+    </div>
+    <div class="card">
+        <table id="vesselTable">
+            <thead><tr><th>Name</th><th>Type</th><th>LOA</th><th>Draft</th><th>Operator</th><th>Contact</th><th>Phone</th><th>Email</th><th>Flags</th><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</main>
+<div id="detailModal"></div>
+<script src="js/api.js"></script>
+<script src="js/vessels.js"></script>
+</body>
+</html>

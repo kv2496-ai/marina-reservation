@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WHOI Marina Reservations — Dashboard</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="topbar">
+    <div class="brand">WHOI Marina Reservations</div>
+    <nav>
+        <a href="index.html" class="active">Dashboard</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="reservations.html">Reservations</a>
+        <a href="vessels.html">Vessels</a>
+        <a href="berths.html">Berths</a>
+        <a href="review.html">Import Review</a>
+    </nav>
+</header>
+<main>
+    <h1>Dashboard</h1>
+    <div class="subtitle" id="asOf">Loading…</div>
+
+    <div class="grid-4">
+        <div class="card stat"><div class="value" id="statArrivals">–</div><div class="label">Arrivals (7 days)</div></div>
+        <div class="card stat"><div class="value" id="statDepartures">–</div><div class="label">Departures (7 days)</div></div>
+        <div class="card stat"><div class="value" id="statOccupied">–</div><div class="label">Berths occupied now</div></div>
+        <div class="card stat danger"><div class="value" id="statConflicts">–</div><div class="label">Unresolved conflicts</div></div>
+    </div>
+
+    <div class="grid-3">
+        <div class="card">
+            <h2>Arrivals — next 7 days</h2>
+            <table id="arrivalsTable"><thead><tr><th>Date</th><th>Vessel / Event</th><th>Berth</th><th>Status</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+            <h2>Departures — next 7 days</h2>
+            <table id="departuresTable"><thead><tr><th>Date</th><th>Vessel / Event</th><th>Berth</th><th>Status</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+            <h2>Free berths right now</h2>
+            <table id="freeBerthsTable"><thead><tr><th>Berth</th><th>Length</th></tr></thead><tbody></tbody></table>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Unresolved hard conflicts</h2>
+        <ul class="flag-list" id="hardConflictList"></ul>
+    </div>
+    <div class="card">
+        <h2>Unresolved warnings &amp; data-quality flags</h2>
+        <ul class="flag-list" id="warningList"></ul>
+    </div>
+</main>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WHOI Marina Reservations — Calendar</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="topbar no-print">
+    <div class="brand">WHOI Marina Reservations</div>
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="calendar.html" class="active">Calendar</a>
+        <a href="reservations.html">Reservations</a>
+        <a href="vessels.html">Vessels</a>
+        <a href="berths.html">Berths</a>
+        <a href="review.html">Import Review</a>
+    </nav>
+</header>
+<main>
+    <h1 id="monthTitle">Calendar</h1>
+    <div class="toolbar no-print">
+        <button class="secondary" id="prevMonth">&larr; Prev</button>
+        <input type="month" id="monthPicker" style="width:auto;">
+        <button class="secondary" id="nextMonth">Next &rarr;</button>
+        <span class="spacer"></span>
+        <button class="secondary" onclick="window.print()">Print</button>
+        <a class="btn secondary" id="exportCsvLink" href="#">Export CSV (this month)</a>
+        <button id="newReservationBtn">+ New reservation</button>
+    </div>
+
+    <div class="card calendar-wrap">
+        <table class="calendar" id="calendarTable"></table>
+    </div>
+
+    <div class="legend no-print">
+        <span><span class="swatch" style="background:var(--kind-vessel)"></span>Vessel</span>
+        <span><span class="swatch" style="background:var(--kind-community_event)"></span>Community event</span>
+        <span><span class="swatch" style="background:var(--kind-tour)"></span>Tour</span>
+        <span><span class="swatch" style="background:var(--kind-maintenance)"></span>Maintenance</span>
+        <span><span class="swatch" style="background:var(--kind-other)"></span>Other</span>
+        <span>Faded = not Confirmed · Red ⚠ = hard conflict</span>
+    </div>
+</main>
+
+<div id="detailModal"></div>
+<script src="js/api.js"></script>
+<script src="js/reservation-form.js"></script>
+<script src="js/calendar.js"></script>
+</body>
+</html>

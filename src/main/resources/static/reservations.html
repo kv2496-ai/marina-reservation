@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WHOI Marina Reservations — Reservations</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="topbar no-print">
+    <div class="brand">WHOI Marina Reservations</div>
+    <nav>
+        <a href="index.html">Dashboard</a>
+        <a href="calendar.html">Calendar</a>
+        <a href="reservations.html" class="active">Reservations</a>
+        <a href="vessels.html">Vessels</a>
+        <a href="berths.html">Berths</a>
+        <a href="review.html">Import Review</a>
+    </nav>
+</header>
+<main>
+    <h1>Reservations</h1>
+
+    <div class="card no-print">
+        <div class="toolbar">
+            <div style="flex:2;"><label>Search</label><input id="fQuery" placeholder="vessel, title, notes…"></div>
+            <div><label>Berth</label><select id="fBerth"><option value="">All</option></select></div>
+            <div><label>Kind</label><select id="fKind"><option value="">All</option></select></div>
+            <div><label>Status</label><select id="fStatus"><option value="">All</option></select></div>
+            <div><label>From</label><input type="date" id="fFrom"></div>
+            <div><label>To</label><input type="date" id="fTo"></div>
+        </div>
+        <div class="toolbar">
+            <button id="searchBtn">Search</button>
+            <button class="secondary" id="clearBtn">Clear filters</button>
+            <span class="spacer"></span>
+            <a class="btn secondary" id="csvLink" href="/api/export/reservations.csv">Export CSV</a>
+            <button id="newBtn">+ New reservation</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 id="resultsHeading">Results</h2>
+        <table id="resultsTable">
+            <thead><tr><th>Start</th><th>End</th><th>Kind</th><th>Vessel / Title</th><th>Berth</th><th>Status</th><th>Rafting</th><th></th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="card no-print">
+        <h2>Find an available berth</h2>
+        <div class="toolbar">
+            <div><label>Start date</label><input type="date" id="availStart"></div>
+            <div><label>End date</label><input type="date" id="availEnd"></div>
+            <div><label>Vessel LOA (ft, optional)</label><input type="number" id="availLoa"></div>
+            <button id="availBtn">Suggest berths</button>
+        </div>
+        <table id="availTable">
+            <thead><tr><th>Berth</th><th>Length</th><th>Fits LOA</th><th>Confirmed conflict</th><th>Note</th></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</main>
+
+<div id="detailModal"></div>
+<script src="js/api.js"></script>
+<script src="js/reservation-form.js"></script>
+<script src="js/reservations.js"></script>
+</body>
+</html>

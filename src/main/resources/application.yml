@@ -1,0 +1,16 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: marina-reservation
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+marina:
+  data-dir: ${MARINA_DATA_DIR:./data}
+  import:
+    # Source workbook used to seed the JSON store on first startup (or when --reimport is passed).
+    source-xlsx: ${MARINA_SOURCE_XLSX:./Dock Schedule - Synthetic Sample.xlsx}
+    force-reimport: ${MARINA_FORCE_REIMPORT:false}

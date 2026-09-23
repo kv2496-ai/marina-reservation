@@ -1,0 +1,13 @@
+target/
+*.class
+*.log
+server.log
+
+# Generated JSON "database" — reproducible from the source workbook via the importer.
+data/*.json
+
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
