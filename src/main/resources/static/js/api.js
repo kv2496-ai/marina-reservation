@@ -32,6 +32,25 @@ const Api = (() => {
     };
 })();
 
+/** Shared site-wide preferences, stored per-browser. Currently just the "hide historical items"
+ *  toggle set on the Resolve tab and read by the Dashboard and Import Review pages. */
+const Settings = (() => {
+    const KEY = 'marina.hideHistorical';
+    function getHideHistorical() {
+        try {
+            return localStorage.getItem(KEY) === 'true';
+        } catch (e) {
+            return false;
+        }
+    }
+    function setHideHistorical(value) {
+        try {
+            localStorage.setItem(KEY, value ? 'true' : 'false');
+        } catch (e) { /* ignore — per-viewer convenience only */ }
+    }
+    return { getHideHistorical, setHideHistorical };
+})();
+
 function newIdempotencyKey() {
     return 'idem-' + Date.now() + '-' + Math.random().toString(36).slice(2);
 }

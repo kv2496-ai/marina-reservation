@@ -34,11 +34,15 @@ public class DashboardService {
         this.flagStore = flagStore;
     }
 
-    public DashboardSummary summary() {
+    public DashboardSummary summary(boolean hideHistorical) {
         LocalDate today = LocalDate.now();
         LocalDate weekOut = today.plusDays(7);
 
-        List<Reservation> all = reservationStore.findAll().stream()
+        List<Reservation> allIncludingCanceled = reservationStore.findAll();
+        java.util.Map<String, Reservation> reservationById = allIncludingCanceled.stream()
+                .collect(java.util.stream.Collectors.toMap(r -> r.id, r -> r, (x, y) -> x));
+
+        List<Reservation> all = allIncludingCanceled.stream()
                 .filter(r -> r.status != ReservationStatus.CANCELED)
                 .toList();
 
@@ -68,7 +72,10 @@ public class DashboardService {
                 .filter(b -> !occupiedBerthIds.contains(b.id))
                 .toList();
 
-        List<ValidationFlag> unresolved = flagStore.findAll().stream().filter(f -> !f.resolved).toList();
+        List<ValidationFlag> unresolved = flagStore.findAll().stream()
+                .filter(f -> !f.resolved)
+                .filter(f -> !hideHistorical || !isHistorical(f, reservationById, today))
+                .toList();
         s.unresolvedHardConflicts = unresolved.stream().filter(f -> f.severity == ValidationSeverity.HARD_CONFLICT).toList();
         s.unresolvedWarnings = unresolved.stream().filter(f -> f.severity != ValidationSeverity.HARD_CONFLICT).toList();
 
@@ -76,5 +83,14 @@ public class DashboardService {
                 .collect(java.util.stream.Collectors.groupingBy(r -> r.kind.toString(), java.util.stream.Collectors.counting()));
 
         return s;
+    }
+
+    /** A flag counts as historical (and gets hidden when the caller asks) if the reservation it's
+     *  attached to already ended before today — matches the "past reservations aren't actionable"
+     *  rule used by the Resolve tab. Flags on a reservation that no longer exists are never hidden,
+     *  since that's a data-quality issue in its own right, not a stale historical one. */
+    private boolean isHistorical(ValidationFlag flag, java.util.Map<String, Reservation> reservationById, LocalDate today) {
+        Reservation r = reservationById.get(flag.reservationId);
+        return r != null && r.endDate != null && r.endDate.isBefore(today);
     }
 }

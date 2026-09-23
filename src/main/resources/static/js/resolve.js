@@ -3,6 +3,13 @@ function todayIso() {
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 }
 
+const hideHistoricalToggle = document.getElementById('hideHistoricalToggle');
+hideHistoricalToggle.checked = Settings.getHideHistorical();
+hideHistoricalToggle.addEventListener('change', () => {
+    Settings.setHideHistorical(hideHistoricalToggle.checked);
+    toast('Saved — applies on Dashboard and Import Review too', 'success');
+});
+
 async function loadAll() {
     const [flags, futureReservations] = await Promise.all([
         Api.get('/api/validation-flags?resolved=false'),

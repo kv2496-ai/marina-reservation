@@ -1,6 +1,22 @@
 let allItems = [];
 
 async function loadReview() {
+    const toolbar = document.getElementById('reviewToolbar');
+    const tableCard = document.getElementById('reviewTableCard');
+    const hiddenNote = document.getElementById('hiddenHistoricalNote');
+
+    if (Settings.getHideHistorical()) {
+        // Every item in this queue originates from the one-time 1997-2019 spreadsheet import —
+        // there's no per-item date to filter by, so "hide historical" hides the whole queue.
+        toolbar.style.display = 'none';
+        tableCard.style.display = 'none';
+        hiddenNote.style.display = '';
+        return;
+    }
+    toolbar.style.display = '';
+    tableCard.style.display = '';
+    hiddenNote.style.display = 'none';
+
     allItems = await Api.get('/api/import/review-queue');
     const categories = [...new Set(allItems.map(i => i.category))].sort();
     const catSelect = document.getElementById('categoryFilter');

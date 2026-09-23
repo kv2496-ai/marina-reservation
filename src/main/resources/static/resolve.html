@@ -29,6 +29,18 @@
         means a log entry here — you still place the call or send the email yourself using the
         contact info on file.</p>
 
+    <div class="card no-print">
+        <label style="margin:0; display:flex; align-items:flex-start; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="hideHistoricalToggle" style="width:auto; margin-top:2px;">
+            <span>
+                <strong style="color:var(--color-text)">Hide historical items on Dashboard &amp; Import Review</strong><br>
+                <span class="small muted">Applies everywhere in this browser. On the Dashboard, this hides
+                conflict/warning flags whose reservation already ended. On Import Review, every item comes from
+                the one-time 1997–2019 import, so this hides that entire queue.</span>
+            </span>
+        </label>
+    </div>
+
     <section class="card" id="conflictsSection">
         <h2>Hard conflicts <span class="pill" id="conflictsCount">0</span></h2>
         <p class="small muted" id="conflictsHistoricalNote"></p>

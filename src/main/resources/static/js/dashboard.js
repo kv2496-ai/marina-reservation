@@ -1,7 +1,9 @@
 async function loadDashboard() {
     try {
-        const s = await Api.get('/api/dashboard');
-        document.getElementById('asOf').textContent = 'As of ' + s.asOf;
+        const hideHistorical = Settings.getHideHistorical();
+        const s = await Api.get('/api/dashboard?hideHistorical=' + hideHistorical);
+        document.getElementById('asOf').textContent = 'As of ' + s.asOf
+            + (hideHistorical ? ' — historical conflicts/warnings hidden (change on the Resolve tab)' : '');
         document.getElementById('statArrivals').textContent = s.arrivalsNext7Days.length;
         document.getElementById('statDepartures').textContent = s.departuresNext7Days.length;
         document.getElementById('statOccupied').textContent = s.occupiedNow.length;

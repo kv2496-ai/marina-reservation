@@ -25,14 +25,18 @@
     ambiguous cells, missing data, possible duplicates — lives here instead of being silently guessed at.
     See also the validation warnings on the <a href="index.html">dashboard</a> for per-reservation issues.</p>
 
-    <div class="toolbar no-print">
+    <p class="empty-note" id="hiddenHistoricalNote" style="display:none">Import review is entirely historical
+        (all of it comes from the 1997–2019 import), so it's hidden while "Hide historical items" is on. Toggle
+        it off on the <a href="resolve.html">Resolve</a> tab to see it again.</p>
+
+    <div class="toolbar no-print" id="reviewToolbar">
         <label style="margin:0;"><input type="checkbox" id="showResolved" style="width:auto;display:inline-block;"> Show resolved</label>
         <select id="categoryFilter" style="max-width:260px;"><option value="">All categories</option></select>
         <span class="spacer"></span>
         <span id="countLabel" class="muted small"></span>
     </div>
 
-    <div class="card">
+    <div class="card" id="reviewTableCard">
         <table id="reviewTable" class="responsive-table">
             <thead><tr><th>Category</th><th>Sheet</th><th>Location</th><th>Description</th><th>Raw data</th><th></th></tr></thead>
             <tbody></tbody>
