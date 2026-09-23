@@ -90,13 +90,17 @@ to this repo needs an account only you control, so that step is on you:
 
 1. Sign up at [Render](https://render.com) (free tier) if you don't already have an account.
 2. New → **Blueprint** → connect your GitHub account → pick `kv2496-ai/marina-reservation`. Render
-   will pick up `render.yaml` automatically (builds the Docker image, sets `PORT`, persists
-   `data/` on a mounted disk).
+   will pick up `render.yaml` automatically and build/run the Docker image.
 3. First boot will take a few extra seconds while it imports the historical workbook, same as
    running locally.
-4. The `Dockerfile` copies the source `.xlsx` into the image so a fresh deploy can self-seed; if
-   you'd rather ship it pre-imported, mount a volume with an already-populated `data/` directory
-   instead.
+
+**Free-tier caveat:** Render's free plan doesn't support persistent disks, so `render.yaml`
+deploys with the JSON store on the container's ephemeral filesystem — it self-re-imports from the
+bundled `.xlsx` on every restart/redeploy (fine for a demo), but any reservations you create or
+edit will be lost on the next restart, and the free plan also spins the service down after
+inactivity (first request after idle takes ~30-60s to wake up). For anything you want to actually
+keep, upgrade to a paid Render plan and add a `disk:` block back to `render.yaml` mounted at
+`/app/data`, or self-host with a real volume.
 
 Any other Docker-friendly host (Railway, Fly.io, your own server) works the same way — build
-`Dockerfile`, run it, set `MARINA_DATA_DIR` to a persistent volume.
+`Dockerfile`, run it, set `MARINA_DATA_DIR` to a persistent volume if you have one.

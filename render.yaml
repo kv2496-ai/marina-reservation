@@ -9,7 +9,8 @@ services:
         value: 8080
       - key: MARINA_DATA_DIR
         value: /app/data
-    disk:
-      name: marina-data
-      mountPath: /app/data
-      sizeGB: 1
+    # NOTE: Render's free plan doesn't support persistent disks, so /app/data lives in the
+    # container's ephemeral filesystem here. It's automatically re-seeded from the source
+    # workbook by ImportRunner on every restart/redeploy, which is fine for a demo — but any
+    # manual edits made between restarts will be lost. Upgrade to a paid plan and uncomment the
+    # `disk:` block below (see git history) if you need edits to actually persist.

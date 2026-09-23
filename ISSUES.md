@@ -166,9 +166,13 @@ Left in here deliberately rather than cleaned out of the history, since two of t
 - **Vessel width, electrical/water hookups, weather closures** etc. are not yet modeled as actual
   fields — `Berth.restrictions` is deliberately an open map so they can be added without
   restructuring anything, but nothing populates it yet.
-- Deployment (Dockerfile/Render config, pushing a public GitHub repo) is prepared but **not yet
-  pushed anywhere public** — publishing something publicly isn't a call I'll make without you
-  explicitly confirming it first. See `README.md` for what's ready to go.
+- **Deployment:** pushed to a public GitHub repo (https://github.com/kv2496-ai/marina-reservation)
+  at your request. Not yet deployed live — that needs a hosting account only you control. Render's
+  **free tier has no persistent disk**, so the ready-to-use `render.yaml` runs the JSON store on
+  ephemeral storage: it self-seeds from the bundled spreadsheet on every restart, but any
+  reservations created/edited on a free-tier deploy are lost on the next restart, and the service
+  sleeps after inactivity (~30-60s cold start). Fine for a demo link, not for real operational use
+  — see `README.md` §Deployment for the upgrade path.
 
 ## 9. Things that need your judgment call
 
