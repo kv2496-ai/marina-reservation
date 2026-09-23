@@ -84,14 +84,19 @@ reservation creation accepts an `Idempotency-Key` header to make accidental doub
 
 ## Deployment
 
-A `Dockerfile` and `render.yaml` are included and ready to use, but **nothing has been pushed to
-a public repository or deployed anywhere yet** — that's a deliberate pause point, not an
-oversight. To actually go live:
+Source is public at **https://github.com/kv2496-ai/marina-reservation**. A `Dockerfile` and
+`render.yaml` are included and ready to use, but nothing is deployed live yet — connecting a host
+to this repo needs an account only you control, so that step is on you:
 
-1. `git init` has already been run locally with an initial commit. Create a GitHub repo and
-   `git remote add origin <url> && git push -u origin main` when you're ready to make it public.
-2. On [Render](https://render.com): New → Blueprint → point at the pushed repo → it will pick up
-   `render.yaml` automatically (builds the Docker image, sets `PORT`, persists `data/` on a disk).
-3. The `Dockerfile` copies the source `.xlsx` into the image so a fresh deploy can self-seed; if
+1. Sign up at [Render](https://render.com) (free tier) if you don't already have an account.
+2. New → **Blueprint** → connect your GitHub account → pick `kv2496-ai/marina-reservation`. Render
+   will pick up `render.yaml` automatically (builds the Docker image, sets `PORT`, persists
+   `data/` on a mounted disk).
+3. First boot will take a few extra seconds while it imports the historical workbook, same as
+   running locally.
+4. The `Dockerfile` copies the source `.xlsx` into the image so a fresh deploy can self-seed; if
    you'd rather ship it pre-imported, mount a volume with an already-populated `data/` directory
    instead.
+
+Any other Docker-friendly host (Railway, Fly.io, your own server) works the same way — build
+`Dockerfile`, run it, set `MARINA_DATA_DIR` to a persistent volume.
