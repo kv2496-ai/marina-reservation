@@ -10,7 +10,7 @@ RUN mvn -q -B package -DskipTests
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 COPY --from=build /build/target/marina-reservation.jar app.jar
-COPY "Dock Schedule - Synthetic Sample.xlsx" ./
+COPY ["Dock Schedule - Synthetic Sample.xlsx", "./"]
 # Persist the JSON flat-file store outside the container layer.
 VOLUME ["/app/data"]
 ENV MARINA_DATA_DIR=/app/data
