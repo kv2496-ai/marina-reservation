@@ -6,6 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -13,6 +14,14 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Object> handleNotFound(NoResourceFoundException ex) {
+        // Spring 6.1+ routes a missing static file/route through the exception-handling chain
+        // instead of just returning 404 directly, so without this it fell through to the
+        // catch-all below and came back as a misleading 500 for every unmatched URL.
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body(404, "Not found: " + ex.getResourcePath()));
+    }
 
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Object> handleResponseStatus(ResponseStatusException ex) {
