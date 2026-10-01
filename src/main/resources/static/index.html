@@ -3,58 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WHOI Marina Reservations — Dashboard</title>
+<title>WHOI Marina Reservations — Schedule</title>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<header class="topbar">
-    <div class="brand">WHOI Marina Reservations</div>
+<header class="topbar no-print">
+    <div class="brand">WHOI Marina</div>
     <nav>
-        <a href="index.html" class="active">Dashboard</a>
-        <a href="calendar.html">Calendar</a>
+        <a href="index.html" class="active">Schedule</a>
         <a href="reservations.html">Reservations</a>
         <a href="vessels.html">Vessels</a>
         <a href="berths.html">Berths</a>
-        <a href="review.html">Import Review</a>
         <a href="resolve.html">Resolve</a>
+        <a href="review.html">Review</a>
+        <a href="stats.html">Stats</a>
     </nav>
 </header>
 <main>
-    <h1>Dashboard</h1>
-    <div class="subtitle" id="asOf">Loading…</div>
-
-    <div class="grid-4">
-        <div class="card stat"><div class="value" id="statArrivals">–</div><div class="label">Arrivals (7 days)</div></div>
-        <div class="card stat"><div class="value" id="statDepartures">–</div><div class="label">Departures (7 days)</div></div>
-        <div class="card stat"><div class="value" id="statOccupied">–</div><div class="label">Berths occupied now</div></div>
-        <div class="card stat danger"><div class="value" id="statConflicts">–</div><div class="label">Unresolved conflicts</div></div>
+    <div class="toolbar no-print">
+        <button class="secondary" id="prevMonth">&larr;</button>
+        <input type="month" id="monthPicker" style="width:auto;">
+        <button class="secondary" id="nextMonth">&rarr;</button>
+        <h1 id="monthTitle" style="margin:0; font-size:16px;"></h1>
+        <span class="view-toggle no-print">
+            <button class="secondary" id="gridViewBtn" type="button">Grid</button>
+            <button class="secondary" id="listViewBtn" type="button">List</button>
+        </span>
+        <span class="spacer"></span>
+        <button class="secondary" onclick="window.print()">Print</button>
+        <a class="btn secondary" id="exportCsvLink" href="#">Export</a>
     </div>
 
-    <div class="grid-3">
-        <div class="card">
-            <h2>Arrivals — next 7 days</h2>
-            <table id="arrivalsTable" class="responsive-table"><thead><tr><th>Date</th><th>Vessel / Event</th><th>Berth</th><th>Status</th></tr></thead><tbody></tbody></table>
-        </div>
-        <div class="card">
-            <h2>Departures — next 7 days</h2>
-            <table id="departuresTable" class="responsive-table"><thead><tr><th>Date</th><th>Vessel / Event</th><th>Berth</th><th>Status</th></tr></thead><tbody></tbody></table>
-        </div>
-        <div class="card">
-            <h2>Free berths right now</h2>
-            <table id="freeBerthsTable" class="responsive-table"><thead><tr><th>Berth</th><th>Length</th></tr></thead><tbody></tbody></table>
-        </div>
+    <div class="card calendar-wrap" id="gridViewWrap">
+        <table class="calendar" id="calendarTable"></table>
     </div>
+    <div class="card" id="listViewWrap" style="display:none;"></div>
 
-    <div class="card">
-        <h2>Unresolved hard conflicts</h2>
-        <ul class="flag-list" id="hardConflictList"></ul>
-    </div>
-    <div class="card">
-        <h2>Unresolved warnings &amp; data-quality flags</h2>
-        <ul class="flag-list" id="warningList"></ul>
+    <div class="legend no-print">
+        <span><span class="swatch" style="background:var(--kind-vessel)"></span>Vessel</span>
+        <span><span class="swatch" style="background:var(--kind-community_event)"></span>Event</span>
+        <span><span class="swatch" style="background:var(--kind-tour)"></span>Tour</span>
+        <span><span class="swatch" style="background:var(--kind-maintenance)"></span>Maintenance</span>
+        <span><span class="swatch" style="background:var(--kind-other)"></span>Other</span>
+        <span>Faded = not Confirmed · ⚠ = conflict</span>
     </div>
 </main>
+
+<div id="detailModal"></div>
 <script src="js/api.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="js/reservation-form.js"></script>
+<script src="js/schedule.js"></script>
 </body>
 </html>

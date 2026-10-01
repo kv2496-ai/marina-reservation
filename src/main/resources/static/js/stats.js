@@ -1,9 +1,9 @@
-async function loadDashboard() {
+async function loadStats() {
     try {
         const hideHistorical = Settings.getHideHistorical();
         const s = await Api.get('/api/dashboard?hideHistorical=' + hideHistorical);
         document.getElementById('asOf').textContent = 'As of ' + s.asOf
-            + (hideHistorical ? ' — historical conflicts/warnings hidden (change on the Resolve tab)' : '');
+            + (hideHistorical ? ' — historical hidden (change on Resolve)' : '');
         document.getElementById('statArrivals').textContent = s.arrivalsNext7Days.length;
         document.getElementById('statDepartures').textContent = s.departuresNext7Days.length;
         document.getElementById('statOccupied').textContent = s.occupiedNow.length;
@@ -27,7 +27,7 @@ async function loadDashboard() {
             `<li class="${f.severity === 'DATA_QUALITY' ? 'data_quality' : ''}">[${f.type}] ${escapeHtml(f.message)}</li>`
         ).join('') || '<li class="muted" style="border:none;background:none;">None</li>';
     } catch (e) {
-        toast('Failed to load dashboard: ' + e.message, 'error');
+        toast('Failed to load stats: ' + e.message, 'error');
     }
 }
 
@@ -42,4 +42,5 @@ function fillReservationTable(tableId, rows, dateFn) {
         </tr>`).join('') || `<tr><td colspan="4" class="muted">None</td></tr>`;
 }
 
-loadDashboard();
+window.refreshPageData = loadStats;
+loadStats();

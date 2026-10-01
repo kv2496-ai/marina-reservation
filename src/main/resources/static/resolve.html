@@ -8,36 +8,26 @@
 </head>
 <body>
 <header class="topbar no-print">
-    <div class="brand">WHOI Marina Reservations</div>
+    <div class="brand">WHOI Marina</div>
     <nav>
-        <a href="index.html">Dashboard</a>
-        <a href="calendar.html">Calendar</a>
+        <a href="index.html">Schedule</a>
         <a href="reservations.html">Reservations</a>
         <a href="vessels.html">Vessels</a>
         <a href="berths.html">Berths</a>
-        <a href="review.html">Import Review</a>
         <a href="resolve.html" class="active">Resolve</a>
+        <a href="review.html">Review</a>
+        <a href="stats.html">Stats</a>
     </nav>
 </header>
 <main>
-    <h1>Resolve</h1>
-    <p class="subtitle">Automated conflict, oversized-berth, and missing-data resolution. Only
-        current/future reservations are actionable here — a reservation that already happened
-        can't be un-booked, so historical flags stay informational (see the
-        <a href="index.html">Dashboard</a> and <a href="review.html">Import Review</a>) and are
-        just counted below, not listed. There's no email/SMS hookup in this prototype: "notify"
-        means a log entry here — you still place the call or send the email yourself using the
-        contact info on file.</p>
+    <p class="subtitle">Only current/future reservations are actionable; historical ones are
+        informational only. "Notify" logs a note here — there's no real email/text in this
+        prototype, so you still place the call yourself.</p>
 
     <div class="card no-print">
-        <label style="margin:0; display:flex; align-items:flex-start; gap:8px; cursor:pointer;">
-            <input type="checkbox" id="hideHistoricalToggle" style="width:auto; margin-top:2px;">
-            <span>
-                <strong style="color:var(--color-text)">Hide historical items on Dashboard &amp; Import Review</strong><br>
-                <span class="small muted">Applies everywhere in this browser. On the Dashboard, this hides
-                conflict/warning flags whose reservation already ended. On Import Review, every item comes from
-                the one-time 1997–2019 import, so this hides that entire queue.</span>
-            </span>
+        <label style="margin:0; display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="hideHistoricalToggle" style="width:auto;">
+            <span>Hide historical items on Stats &amp; Review</span>
         </label>
     </div>
 
@@ -48,31 +38,32 @@
     </section>
 
     <section class="card" id="loaSection">
-        <h2>Vessel too long for its berth <span class="pill" id="loaCount">0</span></h2>
+        <h2>Oversized for berth <span class="pill" id="loaCount">0</span></h2>
         <p class="small muted" id="loaHistoricalNote"></p>
         <div id="loaList"></div>
     </section>
 
     <section class="card" id="missingDataSection">
-        <h2>Missing vital vessel data <span class="pill" id="missingCount">0</span></h2>
+        <h2>Missing vessel data <span class="pill" id="missingCount">0</span></h2>
         <p class="small muted" id="missingHistoricalNote"></p>
         <div id="missingList"></div>
     </section>
 
     <section class="card" id="waitlistSection">
         <h2>Waitlist <span class="pill" id="waitlistCount">0</span></h2>
-        <div class="toolbar no-print"><button class="secondary" id="checkWaitlistBtn">Check for matches now</button></div>
+        <div class="toolbar no-print"><button class="secondary" id="checkWaitlistBtn">Check now</button></div>
         <div id="waitlistList"></div>
     </section>
 
     <section class="card" id="notificationsSection">
-        <h2>Recent notifications</h2>
+        <h2>Notifications</h2>
         <div id="notificationsList"></div>
     </section>
 </main>
 
 <div id="detailModal"></div>
 <script src="js/api.js"></script>
+<script src="js/reservation-form.js"></script>
 <script src="js/resolve.js"></script>
 </body>
 </html>

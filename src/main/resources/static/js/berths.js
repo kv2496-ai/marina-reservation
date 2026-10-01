@@ -82,4 +82,5 @@ function openBerthForm(existing) {
 }
 
 document.getElementById('newBerthBtn').addEventListener('click', () => openBerthForm(null));
+window.refreshPageData = loadBerths;
 loadBerths();

@@ -8,22 +8,21 @@
 </head>
 <body>
 <header class="topbar no-print">
-    <div class="brand">WHOI Marina Reservations</div>
+    <div class="brand">WHOI Marina</div>
     <nav>
-        <a href="index.html">Dashboard</a>
-        <a href="calendar.html">Calendar</a>
+        <a href="index.html">Schedule</a>
         <a href="reservations.html">Reservations</a>
         <a href="vessels.html">Vessels</a>
         <a href="berths.html" class="active">Berths</a>
-        <a href="review.html">Import Review</a>
         <a href="resolve.html">Resolve</a>
+        <a href="review.html">Review</a>
+        <a href="stats.html">Stats</a>
     </nav>
 </header>
 <main>
-    <h1>Berth database</h1>
     <div class="toolbar no-print">
         <span class="spacer"></span>
-        <button id="newBerthBtn">+ New berth</button>
+        <button id="newBerthBtn">+ Berth</button>
     </div>
     <div class="card">
         <table id="berthTable" class="responsive-table">
@@ -34,6 +33,7 @@
 </main>
 <div id="detailModal"></div>
 <script src="js/api.js"></script>
+<script src="js/reservation-form.js"></script>
 <script src="js/berths.js"></script>
 </body>
 </html>

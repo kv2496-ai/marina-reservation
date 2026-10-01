@@ -24,7 +24,7 @@ async function renderCalendar() {
     const monthEnd = dateStr(year, month, daysInMonth(year, month));
 
     document.getElementById('monthTitle').textContent =
-        new Date(year, month - 1, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' }) + ' — Dock Schedule';
+        new Date(year, month - 1, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' });
     document.getElementById('exportCsvLink').href = `/api/export/reservations.csv?from=${monthStart}&to=${monthEnd}`;
 
     [allBerths, allReservations] = await Promise.all([
@@ -160,7 +160,7 @@ function renderListView(year, month) {
     }
 
     if (active.length === 0) {
-        wrap.innerHTML = '<p class="muted">No reservations this month.</p>';
+        wrap.innerHTML = '<p class="muted">Nothing this month.</p>';
         return;
     }
 
@@ -205,7 +205,6 @@ function renderListView(year, month) {
 document.getElementById('prevMonth').addEventListener('click', () => shiftMonth(-1));
 document.getElementById('nextMonth').addEventListener('click', () => shiftMonth(1));
 document.getElementById('monthPicker').addEventListener('change', renderCalendar);
-document.getElementById('newReservationBtn').addEventListener('click', () => ReservationForm.open(null, null, renderCalendar));
 document.getElementById('gridViewBtn').addEventListener('click', () => setViewMode('grid'));
 document.getElementById('listViewBtn').addEventListener('click', () => setViewMode('list'));
 
@@ -217,4 +216,5 @@ function shiftMonth(delta) {
 }
 
 document.getElementById('monthPicker').value = currentMonthValue();
+window.refreshPageData = renderCalendar;
 renderCalendar();

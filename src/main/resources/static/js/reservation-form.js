@@ -21,77 +21,83 @@ const ReservationForm = (() => {
         }, defaults || {});
 
         const idemKey = newIdempotencyKey();
+        // Quick-add starts collapsed; editing shows everything so nothing already set is hidden.
+        const hasAdvanced = r.status !== 'CONFIRMED' || r.raftingApproved || r.notes || r.startTime || r.endTime;
+        const startExpanded = isEdit || hasAdvanced;
 
         const container = document.getElementById('detailModal');
         container.innerHTML = `
         <div class="modal-backdrop" id="modalBackdrop">
           <div class="modal">
-            <h2>${isEdit ? 'Edit reservation' : 'New reservation'}</h2>
+            <h2>${isEdit ? 'Edit' : 'New reservation'}</h2>
             <form id="resForm">
               <div class="row-2">
                 <div>
-                  <label>Kind</label>
                   <select name="kind" id="kindSelect">
                     ${['VESSEL','COMMUNITY_EVENT','TOUR','MAINTENANCE','OTHER'].map(k =>
                         `<option value="${k}" ${r.kind===k?'selected':''}>${k}</option>`).join('')}
                   </select>
                 </div>
                 <div>
-                  <label>Status</label>
-                  <select name="status">
-                    ${['DRAFT','PENDING','CONFIRMED','CANCELED','COMPLETED'].map(s =>
-                        `<option value="${s}" ${r.status===s?'selected':''}>${s}</option>`).join('')}
+                  <select name="berthId">
+                    <option value="">— berth —</option>
+                    ${berths.map(b => `<option value="${b.id}" ${r.berthId===b.id?'selected':''}>${escapeHtml(b.name)}${b.lengthFt ? ' ('+b.lengthFt+"')" : ''}</option>`).join('')}
                   </select>
                 </div>
               </div>
 
               <div id="vesselField">
-                <label>Vessel (autocomplete)</label>
-                <input type="text" name="vesselName" list="vesselOptions" value="${escapeHtml(r.vesselNameSnapshot || '')}" autocomplete="off">
+                <input type="text" name="vesselName" list="vesselOptions" placeholder="Vessel name"
+                       value="${escapeHtml(r.vesselNameSnapshot || '')}" autocomplete="off">
                 <datalist id="vesselOptions"></datalist>
               </div>
               <div id="titleField" style="display:none">
-                <label>Title</label>
-                <input type="text" name="title" value="${escapeHtml(r.title || '')}">
+                <input type="text" name="title" placeholder="Title" value="${escapeHtml(r.title || '')}">
               </div>
-
-              <label>Berth</label>
-              <select name="berthId">
-                <option value="">— unassigned —</option>
-                ${berths.map(b => `<option value="${b.id}" ${r.berthId===b.id?'selected':''}>${escapeHtml(b.name)}${b.lengthFt ? ' ('+b.lengthFt+"')" : ''}</option>`).join('')}
-              </select>
 
               <div class="row-2">
-                <div><label>Start date</label><input type="date" name="startDate" value="${r.startDate||''}" required></div>
-                <div><label>End date</label><input type="date" name="endDate" value="${r.endDate||''}" required></div>
-              </div>
-              <div class="row-2">
-                <div><label>Start time (optional)</label><input type="time" name="startTime" value="${r.startTime||''}"></div>
-                <div><label>End time (optional)</label><input type="time" name="endTime" value="${r.endTime||''}"></div>
+                <div><input type="date" name="startDate" value="${r.startDate||''}" required title="Start date"></div>
+                <div><input type="date" name="endDate" value="${r.endDate||''}" required title="End date"></div>
               </div>
 
-              <label><input type="checkbox" name="raftingApproved" style="width:auto;display:inline-block;vertical-align:-2px;" ${r.raftingApproved?'checked':''}> Rafting / shared-berth approved (overlaps with another rafting-approved reservation are treated as a warning, not a hard conflict)</label>
+              <button type="button" class="secondary" id="moreOptionsToggle" style="margin-top:12px;">
+                ${startExpanded ? 'Fewer options ▴' : 'More options ▾'}
+              </button>
 
-              ${isEdit ? '' : `
-              <label><input type="checkbox" id="recurringToggle" style="width:auto;display:inline-block;vertical-align:-2px;"> Recurring series</label>
-              <div id="recurrenceFields" style="display:none">
+              <div id="moreOptionsSection" style="display:${startExpanded ? '' : 'none'}; margin-top:4px;">
+                <label>Status</label>
+                <select name="status">
+                  ${['DRAFT','PENDING','CONFIRMED','CANCELED','COMPLETED'].map(s =>
+                      `<option value="${s}" ${r.status===s?'selected':''}>${s}</option>`).join('')}
+                </select>
                 <div class="row-2">
-                  <div><label>Frequency</label><select id="recFrequency"><option value="DAILY">Daily</option><option value="WEEKLY" selected>Weekly</option><option value="MONTHLY">Monthly</option></select></div>
-                  <div><label>Every N</label><input type="number" id="recInterval" value="1" min="1"></div>
+                  <div><label>Start time</label><input type="time" name="startTime" value="${r.startTime||''}"></div>
+                  <div><label>End time</label><input type="time" name="endTime" value="${r.endTime||''}"></div>
                 </div>
-                <div class="row-2">
-                  <div><label>Repeat count</label><input type="number" id="recCount" value="8" min="1"></div>
-                  <div><label>Until (optional)</label><input type="date" id="recUntil"></div>
-                </div>
-              </div>`}
 
-              <label>Notes</label>
-              <textarea name="notes" rows="3">${escapeHtml(r.notes || '')}</textarea>
+                <label style="margin-top:12px;"><input type="checkbox" name="raftingApproved" style="width:auto;display:inline-block;vertical-align:-2px;" ${r.raftingApproved?'checked':''}> Rafting approved</label>
+
+                ${isEdit ? '' : `
+                <label><input type="checkbox" id="recurringToggle" style="width:auto;display:inline-block;vertical-align:-2px;"> Recurring series</label>
+                <div id="recurrenceFields" style="display:none">
+                  <div class="row-2">
+                    <div><label>Frequency</label><select id="recFrequency"><option value="DAILY">Daily</option><option value="WEEKLY" selected>Weekly</option><option value="MONTHLY">Monthly</option></select></div>
+                    <div><label>Every N</label><input type="number" id="recInterval" value="1" min="1"></div>
+                  </div>
+                  <div class="row-2">
+                    <div><label>Repeat count</label><input type="number" id="recCount" value="8" min="1"></div>
+                    <div><label>Until (optional)</label><input type="date" id="recUntil"></div>
+                  </div>
+                </div>`}
+
+                <label>Notes</label>
+                <textarea name="notes" rows="2">${escapeHtml(r.notes || '')}</textarea>
+              </div>
 
               <div class="actions">
                 <button type="button" class="secondary" id="cancelFormBtn">Cancel</button>
                 ${isEdit ? '<button type="button" class="danger" id="cancelResBtn">Cancel reservation</button>' : ''}
-                <button type="submit" id="submitBtn">${isEdit ? 'Save changes' : 'Create'}</button>
+                <button type="submit" id="submitBtn">${isEdit ? 'Save' : 'Create'}</button>
               </div>
               <p class="small muted" id="formError"></p>
             </form>
@@ -111,6 +117,14 @@ const ReservationForm = (() => {
         }
         container.querySelector('#kindSelect').addEventListener('change', syncKindFields);
         syncKindFields();
+
+        const moreSection = container.querySelector('#moreOptionsSection');
+        const moreToggle = container.querySelector('#moreOptionsToggle');
+        moreToggle.addEventListener('click', () => {
+            const expanded = moreSection.style.display !== 'none';
+            moreSection.style.display = expanded ? 'none' : '';
+            moreToggle.textContent = expanded ? 'More options ▾' : 'Fewer options ▴';
+        });
 
         const recurringToggle = container.querySelector('#recurringToggle');
         if (recurringToggle) {
@@ -148,7 +162,7 @@ const ReservationForm = (() => {
 
             const payload = {
                 kind,
-                status: fd.get('status'),
+                status: fd.get('status') || 'CONFIRMED',
                 berthId: fd.get('berthId') || null,
                 startDate: fd.get('startDate'),
                 endDate: fd.get('endDate'),
@@ -207,4 +221,24 @@ const ReservationForm = (() => {
     }
 
     return { open, close };
+})();
+
+// ---------- Global "+" floating action button ----------
+// Mounted on every page that includes this script, so creating a reservation never requires
+// navigating to Schedule or Reservations first. Pages that need a specific refresh after saving
+// set window.refreshPageData to their own reload function before this runs.
+(() => {
+    if (!document.getElementById('detailModal')) return;
+    const fab = document.createElement('button');
+    fab.id = 'newReservationFab';
+    fab.className = 'fab no-print';
+    fab.type = 'button';
+    fab.title = 'New reservation';
+    fab.textContent = '+';
+    fab.addEventListener('click', () => {
+        ReservationForm.open(null, null, () => {
+            if (typeof window.refreshPageData === 'function') window.refreshPageData();
+        });
+    });
+    document.body.appendChild(fab);
 })();

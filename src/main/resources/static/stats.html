@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WHOI Marina Reservations — Stats</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="topbar no-print">
+    <div class="brand">WHOI Marina</div>
+    <nav>
+        <a href="index.html">Schedule</a>
+        <a href="reservations.html">Reservations</a>
+        <a href="vessels.html">Vessels</a>
+        <a href="berths.html">Berths</a>
+        <a href="resolve.html">Resolve</a>
+        <a href="review.html">Review</a>
+        <a href="stats.html" class="active">Stats</a>
+    </nav>
+</header>
+<main>
+    <div class="subtitle" id="asOf">Loading…</div>
+
+    <div class="grid-4">
+        <div class="card stat"><div class="value" id="statArrivals">–</div><div class="label">Arrivals (7d)</div></div>
+        <div class="card stat"><div class="value" id="statDepartures">–</div><div class="label">Departures (7d)</div></div>
+        <div class="card stat"><div class="value" id="statOccupied">–</div><div class="label">Occupied now</div></div>
+        <div class="card stat danger"><div class="value" id="statConflicts">–</div><div class="label">Conflicts</div></div>
+    </div>
+
+    <div class="grid-3">
+        <div class="card">
+            <h2>Arrivals (7d)</h2>
+            <table id="arrivalsTable" class="responsive-table"><thead><tr><th>Date</th><th>Vessel / Event</th><th>Berth</th><th>Status</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+            <h2>Departures (7d)</h2>
+            <table id="departuresTable" class="responsive-table"><thead><tr><th>Date</th><th>Vessel / Event</th><th>Berth</th><th>Status</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="card">
+            <h2>Free berths now</h2>
+            <table id="freeBerthsTable" class="responsive-table"><thead><tr><th>Berth</th><th>Length</th></tr></thead><tbody></tbody></table>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Hard conflicts</h2>
+        <ul class="flag-list" id="hardConflictList"></ul>
+    </div>
+    <div class="card">
+        <h2>Warnings</h2>
+        <ul class="flag-list" id="warningList"></ul>
+    </div>
+</main>
+<div id="detailModal"></div>
+<script src="js/api.js"></script>
+<script src="js/reservation-form.js"></script>
+<script src="js/stats.js"></script>
+</body>
+</html>

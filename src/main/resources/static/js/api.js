@@ -33,7 +33,7 @@ const Api = (() => {
 })();
 
 /** Shared site-wide preferences, stored per-browser. Currently just the "hide historical items"
- *  toggle set on the Resolve tab and read by the Dashboard and Import Review pages. */
+ *  toggle set on the Resolve tab and read by the Stats and Review pages. */
 const Settings = (() => {
     const KEY = 'marina.hideHistorical';
     function getHideHistorical() {

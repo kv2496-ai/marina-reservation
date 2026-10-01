@@ -7,7 +7,7 @@ const hideHistoricalToggle = document.getElementById('hideHistoricalToggle');
 hideHistoricalToggle.checked = Settings.getHideHistorical();
 hideHistoricalToggle.addEventListener('change', () => {
     Settings.setHideHistorical(hideHistoricalToggle.checked);
-    toast('Saved — applies on Dashboard and Import Review too', 'success');
+    toast('Saved — applies on Stats and Review too', 'success');
 });
 
 async function loadAll() {
@@ -28,7 +28,7 @@ async function loadAll() {
 function historicalNote(elId, totalCount, shownCount) {
     const hidden = totalCount - shownCount;
     document.getElementById(elId).textContent = hidden > 0
-        ? `${hidden} historical (already past) flagged reservation${hidden === 1 ? '' : 's'} not shown here — see Dashboard / Import Review.`
+        ? `${hidden} historical flagged reservation${hidden === 1 ? '' : 's'} not shown — see Stats / Review.`
         : '';
 }
 
@@ -299,4 +299,5 @@ async function renderNotifications() {
     }));
 }
 
+window.refreshPageData = loadAll;
 loadAll();

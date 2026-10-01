@@ -71,13 +71,20 @@ async function search() {
     });
 }
 
-document.getElementById('searchBtn').addEventListener('click', search);
+// Auto-search: dropdowns/dates search immediately, free text is debounced so we're not
+// hammering the API on every keystroke.
+let searchDebounce;
+document.getElementById('fQuery').addEventListener('input', () => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(search, 300);
+});
+document.querySelectorAll('#fBerth,#fKind,#fStatus,#fFrom,#fTo').forEach(el => el.addEventListener('change', search));
+
 document.getElementById('clearBtn').addEventListener('click', () => {
     document.querySelectorAll('#fQuery,#fFrom,#fTo').forEach(el => el.value = '');
     document.querySelectorAll('#fBerth,#fKind,#fStatus').forEach(el => el.value = '');
     search();
 });
-document.getElementById('newBtn').addEventListener('click', () => ReservationForm.open(null, null, search));
 
 document.getElementById('availBtn').addEventListener('click', async () => {
     const start = document.getElementById('availStart').value;
@@ -102,4 +109,5 @@ document.getElementById('availBtn').addEventListener('click', async () => {
     }
 });
 
+window.refreshPageData = search;
 init();
