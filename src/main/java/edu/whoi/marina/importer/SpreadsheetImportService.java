@@ -1,6 +1,7 @@
 package edu.whoi.marina.importer;
 
 import edu.whoi.marina.domain.*;
+import edu.whoi.marina.service.AppStatusService;
 import edu.whoi.marina.service.ValidationService;
 import edu.whoi.marina.store.JsonCollectionStore;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -30,17 +31,20 @@ public class SpreadsheetImportService {
     private final JsonCollectionStore<Reservation> reservationStore;
     private final JsonCollectionStore<ReviewQueueItem> reviewQueueStore;
     private final ValidationService validationService;
+    private final AppStatusService statusService;
 
     public SpreadsheetImportService(JsonCollectionStore<Berth> berthStore,
                                      JsonCollectionStore<Vessel> vesselStore,
                                      JsonCollectionStore<Reservation> reservationStore,
                                      JsonCollectionStore<ReviewQueueItem> reviewQueueStore,
-                                     ValidationService validationService) {
+                                     ValidationService validationService,
+                                     AppStatusService statusService) {
         this.berthStore = berthStore;
         this.vesselStore = vesselStore;
         this.reservationStore = reservationStore;
         this.reviewQueueStore = reviewQueueStore;
         this.validationService = validationService;
+        this.statusService = statusService;
     }
 
     public ImportSummary importFrom(String xlsxPath) throws Exception {
@@ -184,9 +188,12 @@ public class SpreadsheetImportService {
             reservationStore.saveAll(reservations);
             reviewQueueStore.saveAll(reviewItems);
             summary.inc("reviewQueue.items", reviewItems.size());
+            statusService.setReservationCount(reservations.size());
 
+            statusService.markValidating(berths.size());
             for (Berth b : berths) {
                 validationService.revalidateBerth(b.id);
+                statusService.incrementBerthsValidated();
             }
         }
 

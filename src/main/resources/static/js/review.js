@@ -54,4 +54,5 @@ function render() {
 
 document.getElementById('showResolved').addEventListener('change', render);
 document.getElementById('categoryFilter').addEventListener('change', render);
-loadReview();
+window.refreshPageData = loadReview;
+whenReady(loadReview);

@@ -43,4 +43,4 @@ function fillReservationTable(tableId, rows, dateFn) {
 }
 
 window.refreshPageData = loadStats;
-loadStats();
+whenReady(loadStats);

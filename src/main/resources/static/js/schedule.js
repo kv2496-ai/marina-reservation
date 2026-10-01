@@ -217,4 +217,4 @@ function shiftMonth(delta) {
 
 document.getElementById('monthPicker').value = currentMonthValue();
 window.refreshPageData = renderCalendar;
-renderCalendar();
+whenReady(renderCalendar);

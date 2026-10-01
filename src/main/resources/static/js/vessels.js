@@ -99,4 +99,4 @@ function openVesselForm(existing) {
 document.getElementById('vesselSearch').addEventListener('input', (e) => loadVessels(e.target.value));
 document.getElementById('newVesselBtn').addEventListener('click', () => openVesselForm(null));
 window.refreshPageData = () => loadVessels(document.getElementById('vesselSearch').value);
-loadVessels('');
+whenReady(() => loadVessels(''));

@@ -300,4 +300,4 @@ async function renderNotifications() {
 }
 
 window.refreshPageData = loadAll;
-loadAll();
+whenReady(loadAll);

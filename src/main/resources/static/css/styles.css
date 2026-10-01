@@ -207,6 +207,28 @@ table.calendar td.day-cell .conflict-mark { color: #fff; font-weight: 700; margi
 .text-right { text-align: right; }
 .small { font-size: 12px; }
 
+/* --- Loading overlay: blocks the whole UI until the backend confirms real data is ready --- */
+.loading-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: var(--color-primary-dark);
+    color: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 14px; text-align: center; padding: 24px;
+    opacity: 1; transition: opacity 0.35s ease;
+}
+.loading-overlay.hide { opacity: 0; pointer-events: none; }
+.loading-spinner {
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 5px solid rgba(255,255,255,0.25);
+    border-top-color: #fff;
+    animation: loading-spin 0.85s linear infinite;
+}
+@keyframes loading-spin { to { transform: rotate(360deg); } }
+.loading-title { font-size: 19px; font-weight: 700; }
+.loading-detail { font-size: 14px; opacity: 0.92; min-height: 20px; }
+.loading-note { font-size: 12px; opacity: 0.65; max-width: 380px; line-height: 1.5; }
+.loading-slow { font-size: 12px; opacity: 0.8; max-width: 380px; margin-top: 6px; }
+
 /* --- Resolve tab --- */
 .resolve-card {
     border: 1px solid var(--color-border); border-radius: 8px; padding: 10px 14px;

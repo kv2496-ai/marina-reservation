@@ -110,4 +110,4 @@ document.getElementById('availBtn').addEventListener('click', async () => {
 });
 
 window.refreshPageData = search;
-init();
+whenReady(init);
